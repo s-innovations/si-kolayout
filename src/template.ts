@@ -5,18 +5,7 @@ import * as text from "text";
 import "./stringTemplateEngine";
 import ko = require("knockout");
 
-declare module "text" {
-    interface text {
-        load(name: string, req: any, onLoad: any, config: any): void;
-        write(pluginName: string, moduleName: string, write: any, config: any): void;
-    }
-    let a: text;
-    export = a;
-}
-declare module "text!*" {
-    let txt: string;
-    export = txt;
-}
+
 
 var loader = {
     load: function (name: string, req: any, load: any, config: any) {
