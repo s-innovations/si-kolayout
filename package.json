@@ -1,0 +1,18 @@
+{
+    "version": "1.0.0",
+    "name": "si-dependency-injection",
+    "author": "Poul K. Sorensen <pks@s-innovations.net> (http://twitter.com/pksorensen)",
+    "homepage": "https://www.s-innovations.net",
+    "bugs": {
+        "url": "https://github.com/s-innovations/si-appbuilder/issues",
+        "email": "bugs@s-innovations.com"
+    },
+    "devDependencies": {
+        "@types/knockout": "3.4.53",
+        "typescript": "2.8.3"
+    },
+    "files": [
+        "artifacts"
+    ],
+    "typings": "artifacts/typings/index.d.ts"
+}
