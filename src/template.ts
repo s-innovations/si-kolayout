@@ -1,12 +1,12 @@
 //Not really sure where I got this from (copy/paste from project to project)
 //Code converted to typescript.
+import * as ko from "knockout";
 
-import * as text from "text";
+
 import "./stringTemplateEngine";
-import ko = require("knockout");
+import * as text from "text";
 
-
-
+ 
 var loader = {
     load: function (name: string, req: any, load: any, config: any) {
         var onLoad = config.isBuild ? load : function (content: string) {

@@ -117,15 +117,29 @@ export function createTemplate(nodes: HTMLElement) {
     return id.toString();
 }
 
+function isPromiseLayout(layout: IKoLayout | PromiseLike<IKoLayout>) : layout is PromiseLike < IKoLayout > {
+    return layout && "then" in layout && typeof layout.then === 'function';
+}
 ko.bindingHandlers.koLayout = {
     init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
 
-        var vm = valueAccessor();
-        var layout = ko.utils.unwrapObservable<IKoLayout>(vm);
+        let vm = valueAccessor();
+        let layout = ko.utils.unwrapObservable < IKoLayout | PromiseLike<IKoLayout>>(vm);
 
 
+      
 
         if (isDefined(layout)) {
+
+            if (isPromiseLayout(layout)) {
+                let resolver = ko.observable(false);
+                let subscribe = resolver();
+
+                ko.utils.domData.set(element, "kolayout_async", resolver);
+                layout.then(k => { resolver(true); })
+                return;
+            }
+
             ko.utils.domData.set(element, "kolayout_init", true);
             ko.utils.domData.set(element, "kolayout_model", layout);
             ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
@@ -140,10 +154,16 @@ ko.bindingHandlers.koLayout = {
 
         }
     },
-    update: function (element: any, valueAccessor: () => any, allBindingsAccessor?: KnockoutAllBindingsAccessor, viewModel?: any, bindingContext?: KnockoutBindingContext) {
+    update: async function (element: any, valueAccessor: () => any, allBindingsAccessor?: ko.AllBindings, viewModel?: any, bindingContext?: ko.BindingContext) {
 
+        let vm = valueAccessor();
+        let layout = ko.utils.unwrapObservable<IKoLayout | PromiseLike<IKoLayout>>(vm);
 
-        var layout = ko.utils.unwrapObservable<IKoLayout>(valueAccessor());
+        if (isPromiseLayout(layout)) {
+            layout = await layout;
+        }
+      //  var layout = await Promise.resolve(ko.utils.unwrapObservable<IKoLayout>(valueAccessor()));
+
 
         if (isDefined(layout)) {
 

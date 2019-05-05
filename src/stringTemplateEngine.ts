@@ -1,16 +1,25 @@
 //https://github.com/rniemeyer/SamplePresentation/blob/master/js/stringTemplateEngine.js
 //Changed to typescript
 
-import  ko =require("knockout");
+import * as ko from "knockout";
 
 
 let templates: { [name: string]: string } = {},
     data: { [name: string]: any } = {},
     engine = new ko.nativeTemplateEngine();
 
+declare module "knockout" {
+
+    module templateSources {
+        var stringTemplate: new (name: string) => ko.TemplateSource;
+        
+    }
+
+    var templates: { [name: string]: string }
+}
 
 
-class stringTemplate implements KnockoutTemplateSourcesDomElement {
+class stringTemplate implements ko.TemplateSource {
     constructor(public templateName: string) {
 
     }
@@ -62,6 +71,7 @@ engine.makeTemplateSource = function (template, doc) {
 };
 
 //make the templates accessible
+//@ts-ignore
 ko.templates = templates;
 
 //make this new template engine our default engine
